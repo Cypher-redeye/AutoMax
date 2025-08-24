@@ -26,12 +26,16 @@ SECRET_KEY = env("SECRET_KEY")
 DEBUG = env("DJANGOAPPMODE", default="Debug") == "Debug"
 print(f"Application running in debug mode: {DEBUG}")
 
-ALLOWED_HOSTS = [
-    "automax-django-udemy.herokuapp.com",
-    "127.0.0.1",
-    "localhost",
-]
+# settings.py
 
+ALLOWED_HOSTS = [
+    # For Vercel deployments (production and previews)
+    '.vercel.app',
+    
+    # For local development
+    '127.0.0.1',
+    'localhost',
+]
 # Application definition
 INSTALLED_APPS = [
     "django.contrib.admin",
