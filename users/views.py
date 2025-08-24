@@ -29,7 +29,7 @@ def login_view(request):
             messages.error(request, f'An error occured trying to login.')
     elif request.method == 'GET':
         login_form = AuthenticationForm()
-    return render(request, 'views/login.html', {'login_form': login_form})
+    return render(request, 'users/login.html', {'login_form': login_form})
 
 
 @login_required
@@ -42,7 +42,7 @@ class RegisterView(View):
 
     def get(self, request):
         register_form = UserCreationForm()
-        return render(request, 'views/register.html', {'register_form': register_form})
+        return render(request, 'users/register.html', {'register_form': register_form})
 
     def post(self, request):
         register_form = UserCreationForm(request.POST)
@@ -55,7 +55,7 @@ class RegisterView(View):
             return redirect('home')
         else:
             messages.error(request, f'An error occured trying to register.')
-            return render(request, 'views/register.html', {'register_form': register_form})
+            return render(request, 'users/register.html', {'register_form': register_form})
 
 
 @method_decorator(login_required, name='dispatch')
@@ -68,7 +68,7 @@ class ProfileView(View):
         user_form = UserForm(instance=request.user)
         profile_form = ProfileForm(instance=request.user.profile)
         location_form = LocationForm(instance=request.user.profile.location)
-        return render(request, 'views/profile.html', {'user_form': user_form,
+        return render(request, 'users/profile.html', {'user_form': user_form,
                                                       'profile_form': profile_form,
                                                       'location_form': location_form,
                                                       'user_listings': user_listings,
@@ -91,7 +91,7 @@ class ProfileView(View):
             return redirect('profile')
         else:
             messages.error(request, 'Error Updating Profile!')
-        return render(request, 'views/profile.html', {'user_form': user_form,
+        return render(request, 'users/profile.html', {'user_form': user_form,
                                                       'profile_form': profile_form,
                                                       'location_form': location_form,
                                                       'user_listings': user_listings,

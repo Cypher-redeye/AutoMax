@@ -1,21 +1,11 @@
 <div class="card shadow-sm">
- {% if listing.image %}
     <img class="bd-placeholder-img card-img-top" width="100%" src="{{listing.image.url}}" role="img"
-{% else %}
-    <img class="bd-placeholder-img card-img-top" width="100%" src="/static/default-thumbnail.jpg" role="img">
-{% endif %}
-
         aria-label="Placeholder: Thumbnail" focusable="false">
     <div class="card-body">
         <h4 class="card-text">{{listing.model}}</h4>
         <div class="row justify-content-start align-items-center">
             <div class="col-1">
-            {% if listing.seller.photo %}
                 <img src="{{listing.seller.photo.url}}" class="rounded-circle" height="30" width="30"
-                {% else %}
-                <img src="/static/default.jpg" class="rounded-circle" height="30" width="30" style="object-fit: cover;" alt="Default user profile photo, neutral expression, set against a plain background">
-                {% endif %}
-
                     style="object-fit: cover;">
             </div>
             <div class="col-4">

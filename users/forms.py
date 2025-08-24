@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from localflavor.us.forms import USZipCodeField
 
 from .models import Location, Profile
-
 from .widgets import CustomPictureImageFieldWidget
 
 
