@@ -1,6 +1,5 @@
 """
-Django settings for automax project.
-Optimized for deployment on Render.
+Django settings for AutoMax project (Render-ready).
 """
 
 import os
@@ -8,34 +7,39 @@ from pathlib import Path
 import environ
 from django.contrib.messages import constants as messages
 
-# -------------------------------------------------------------------
-# Base settings
-# -------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# BASE & ENVIRONMENT
+# ------------------------------------------------------------------------------
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Environment variables
 env = environ.Env(
     DEBUG=(bool, False),
     USEDEBUGDB=(bool, True),
 )
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
-# Security
-SECRET_KEY = env("SECRET_KEY", default="unsafe-secret-key")  # change in production
+# ------------------------------------------------------------------------------
+# SECURITY
+# ------------------------------------------------------------------------------
+SECRET_KEY = env("SECRET_KEY", default="changeme-secret-key")
+
 DEBUG = env("DJANGOAPPMODE", default="Debug") == "Debug"
 print(f"Application running in debug mode: {DEBUG}")
 
-# -------------------------------------------------------------------
-# Hosts
-# -------------------------------------------------------------------
-# Example: DJANGO_ALLOWED_HOSTS=automax.onrender.com localhost 127.0.0.1
-ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["127.0.0.1", "localhost"])
+# Allowed hosts (local + env for Render)
+ALLOWED_HOSTS = env.list(
+    "ALLOWED_HOSTS",
+    default=[
+        "127.0.0.1",
+        "localhost",
+        ".onrender.com",   # allow any Render subdomain
+    ],
+)
 
-# -------------------------------------------------------------------
-# Installed apps
-# -------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# APPLICATIONS
+# ------------------------------------------------------------------------------
 INSTALLED_APPS = [
-    # Django apps
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -43,23 +47,20 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
-    # Third-party apps
+    # Third-party
     "localflavor",
     "crispy_forms",
     "crispy_bootstrap4",
     "django_filters",
 
-    # Project apps
+    # Your apps
     "main",
     "users",
 ]
 
-# -------------------------------------------------------------------
-# Middleware
-# -------------------------------------------------------------------
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",  # Static file optimization
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # static files on Render
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -68,15 +69,12 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-# -------------------------------------------------------------------
-# URLs and WSGI
-# -------------------------------------------------------------------
 ROOT_URLCONF = "automax.urls"
 
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, "templates")],  # global templates
+        "DIRS": [BASE_DIR / "templates"],  # global templates folder
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -91,9 +89,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "automax.wsgi.application"
 
-# -------------------------------------------------------------------
-# Database
-# -------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# DATABASE
+# ------------------------------------------------------------------------------
 if env("USEDEBUGDB", default=True):
     DATABASES = {
         "default": {
@@ -113,9 +111,9 @@ else:
         }
     }
 
-# -------------------------------------------------------------------
-# Authentication & Login
-# -------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# AUTH & USER
+# ------------------------------------------------------------------------------
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
@@ -126,61 +124,55 @@ AUTH_PASSWORD_VALIDATORS = [
 LOGIN_REDIRECT_URL = "/home/"
 LOGIN_URL = "/login/"
 
-# -------------------------------------------------------------------
-# Messages
-# -------------------------------------------------------------------
-MESSAGE_TAGS = {
-    messages.ERROR: "danger"
-}
+# ------------------------------------------------------------------------------
+# MESSAGES
+# ------------------------------------------------------------------------------
+MESSAGE_TAGS = {messages.ERROR: "danger"}
 
-# -------------------------------------------------------------------
-# Internationalization
-# -------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# INTERNATIONALIZATION
+# ------------------------------------------------------------------------------
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"
 USE_I18N = True
 USE_TZ = True
 
-# -------------------------------------------------------------------
-# Static & Media files
-# -------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# STATIC & MEDIA
+# ------------------------------------------------------------------------------
 STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_DIRS = [BASE_DIR / "static"]
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_ROOT = BASE_DIR / "media"
 
-# -------------------------------------------------------------------
-# Optional: AWS S3 storage (for production media)
-# -------------------------------------------------------------------
-DEFAULT_FILE_STORAGE = env(
-    "DEFAULT_FILE_STORAGE",
-    default="django.core.files.storage.FileSystemStorage"
-)
-
+# ------------------------------------------------------------------------------
+# STORAGE (optional: AWS S3, set env vars to activate)
+# ------------------------------------------------------------------------------
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 AWS_ACCESS_KEY_ID = env("BUCKETEER_AWS_ACCESS_KEY_ID", default="")
 AWS_SECRET_ACCESS_KEY = env("BUCKETEER_AWS_SECRET_ACCESS_KEY", default="")
 AWS_S3_REGION_NAME = env("BUCKETEER_AWS_REGION", default="")
 AWS_STORAGE_BUCKET_NAME = env("BUCKETEER_BUCKET_NAME", default="")
 
-# -------------------------------------------------------------------
-# Crispy Forms
-# -------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# CRISPY FORMS
+# ------------------------------------------------------------------------------
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 
-# -------------------------------------------------------------------
-# Email
-# -------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# EMAIL
+# ------------------------------------------------------------------------------
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = env("EMAIL_HOST", default="smtp.mailgun.org")
-EMAIL_PORT = env("EMAIL_PORT", default=587)
+EMAIL_HOST = "smtp.mailgun.org"
+EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="dummy@example.com")
-EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="dummy")
+EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")
 
-# -------------------------------------------------------------------
-# Default primary key field type
-# -------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# DEFAULT PRIMARY KEY FIELD
+# ------------------------------------------------------------------------------
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
