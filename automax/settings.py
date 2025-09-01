@@ -7,7 +7,7 @@ import dj_database_url
 # 🌱 Environment Variables
 # ===============================
 env = environ.Env(
-    DJANGOAPPMODE=(str, "Debug"),  # Debug or Production
+    DJANGOAPPMODE=(str, "Debug"),
     USEDEBUGDB=(bool, True),
 )
 
