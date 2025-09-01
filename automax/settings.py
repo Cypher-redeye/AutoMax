@@ -7,7 +7,8 @@ import dj_database_url
 # 🌱 Environment Variables
 # ===============================
 env = environ.Env(
-    DJANGOAPPMODE=(str, "Debug"),
+    DJANGOAPPMODE=(str, "Debug"),  # Debug or Production
+    USEDEBUGDB=(bool, True),
 )
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -84,7 +85,6 @@ WSGI_APPLICATION = "automax.wsgi.application"
 USEDEBUGDB = env.bool("USEDEBUGDB", default=True)
 
 if USEDEBUGDB:
-    # Local SQLite
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
@@ -92,9 +92,11 @@ if USEDEBUGDB:
         }
     }
 else:
-    # Production PostgreSQL (Render)
+    DATABASE_URL = env("DATABASE_URL")
+    if not DATABASE_URL:
+        raise ValueError("DATABASE_URL must be set in production!")
     DATABASES = {
-        "default": dj_database_url.parse(env("DATABASE_URL"), conn_max_age=600)
+        "default": dj_database_url.parse(DATABASE_URL, conn_max_age=600)
     }
 
 # ===============================
