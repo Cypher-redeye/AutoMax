@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 import environ
+import dj_database_url
 
 # ===============================
 # 🌱 Environment Variables
@@ -9,7 +10,6 @@ env = environ.Env(
     DJANGOAPPMODE=(str, "Debug"),
 )
 
-# Load .env (only in local dev)
 BASE_DIR = Path(__file__).resolve().parent.parent
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
@@ -35,21 +35,21 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
-    # your apps
+    # Your apps
     "main",
     "users",
 
-    # crispy forms
+    # Crispy forms
     "crispy_forms",
     "crispy_bootstrap5",
 ]
 
 # ===============================
-# 🛡️ Middleware
+# 🗄️ Middleware
 # ===============================
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",  # <== Whitenoise
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -84,6 +84,7 @@ WSGI_APPLICATION = "automax.wsgi.application"
 USEDEBUGDB = env.bool("USEDEBUGDB", default=True)
 
 if USEDEBUGDB:
+    # Local SQLite
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
@@ -91,15 +92,9 @@ if USEDEBUGDB:
         }
     }
 else:
+    # Production PostgreSQL (Render)
     DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": env("DBNAME"),
-            "USER": env("DBUSER"),
-            "PASSWORD": env("DBPASSWORD"),
-            "HOST": env("DBHOST"),
-            "PORT": env("DBPORT", default="5432"),
-        }
+        "default": dj_database_url.parse(env("DATABASE_URL"), conn_max_age=600)
     }
 
 # ===============================
@@ -126,8 +121,6 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
-
-# Whitenoise settings
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 MEDIA_URL = "/media/"
@@ -143,9 +136,9 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 # 📧 Email
 # ===============================
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
+EMAIL_HOST = env("EMAIL_HOST", default="smtp.gmail.com")
+EMAIL_PORT = env.int("EMAIL_PORT", default=587)
+EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS", default=True)
 EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="dummy@example.com")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="dummy")
 
