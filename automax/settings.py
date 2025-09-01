@@ -10,6 +10,12 @@ env = environ.Env(
 # Build paths
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# ===============================
+# 📝 Crispy Forms
+# ===============================
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+
 # Take environment variables from .env file (only in local dev)
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
@@ -19,7 +25,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 SECRET_KEY = env("SECRET_KEY", default="django-insecure-default-key")
 DEBUG = env("DJANGOAPPMODE") == "Debug"
 
-# Allowed hosts (local + Render if needed)
+# Allowed hosts (local only by default)
 ALLOWED_HOSTS = env.list(
     "ALLOWED_HOSTS",
     default=["127.0.0.1", "localhost"],
@@ -35,7 +41,14 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # add your apps here
+
+    # your apps
+    "main",
+    "users",
+
+    # crispy forms
+    "crispy_forms",
+    "crispy_bootstrap5",
 ]
 
 MIDDLEWARE = [
