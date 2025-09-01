@@ -2,21 +2,15 @@ import os
 from pathlib import Path
 import environ
 
-# Load environment variables
+# ===============================
+# 🌱 Environment Variables
+# ===============================
 env = environ.Env(
     DJANGOAPPMODE=(str, "Debug"),
 )
 
-# Build paths
+# Load .env (only in local dev)
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-# ===============================
-# 📝 Crispy Forms
-# ===============================
-CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
-CRISPY_TEMPLATE_PACK = "bootstrap5"
-
-# Take environment variables from .env file (only in local dev)
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 # ===============================
@@ -25,14 +19,13 @@ environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 SECRET_KEY = env("SECRET_KEY", default="django-insecure-default-key")
 DEBUG = env("DJANGOAPPMODE") == "Debug"
 
-# Allowed hosts (local only by default)
 ALLOWED_HOSTS = env.list(
     "ALLOWED_HOSTS",
-    default=["127.0.0.1", "localhost"],
+    default=["127.0.0.1", "localhost", ".onrender.com"],
 )
 
 # ===============================
-# 📦 Installed Apps & Middleware
+# 📦 Installed Apps
 # ===============================
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -51,9 +44,12 @@ INSTALLED_APPS = [
     "crispy_bootstrap5",
 ]
 
+# ===============================
+# 🛡️ Middleware
+# ===============================
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",  # 👈 Added here
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # <== Whitenoise
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -83,14 +79,28 @@ TEMPLATES = [
 WSGI_APPLICATION = "automax.wsgi.application"
 
 # ===============================
-# 🗄️ Database (SQLite only)
+# 🗄️ Database
 # ===============================
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+USEDEBUGDB = env.bool("USEDEBUGDB", default=True)
+
+if USEDEBUGDB:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": env("DBNAME"),
+            "USER": env("DBUSER"),
+            "PASSWORD": env("DBPASSWORD"),
+            "HOST": env("DBHOST"),
+            "PORT": env("DBPORT", default="5432"),
+        }
+    }
 
 # ===============================
 # 🔤 Password Validation
@@ -111,17 +121,23 @@ USE_I18N = True
 USE_TZ = True
 
 # ===============================
-# 🖼️ Static & Media Files
+# 🖼️ Static & Media
 # ===============================
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-# WhiteNoise config 👇
+# Whitenoise settings
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+# ===============================
+# 📝 Crispy Forms
+# ===============================
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 # ===============================
 # 📧 Email
