@@ -136,3 +136,16 @@ def inquire_listing_using_email(request, id):
             "success": False,
             "info": e,
         })
+
+
+@login_required
+def delete_view(request, id):
+    listing = get_object_or_404(Listing, id=id)
+    
+    if listing.seller.user != request.user:
+        messages.error(request, "You do not have permission to delete this listing.")
+        return redirect('home')
+    
+    listing.delete()
+    messages.info(request, "Listing deleted successfully!")
+    return redirect('home')

@@ -19,7 +19,7 @@ class Listing(models.Model):
     color = models.CharField(max_length=24,)
     description = models.TextField()
     engine = models.CharField(max_length=24,)
-    transmisson = models.CharField(
+    transmission = models.CharField(
         max_length=24, choices=TRANSMISSION_OPTIONS, default=None)
     location = models.OneToOneField(
         Location, on_delete=models.SET_NULL, null=True)
