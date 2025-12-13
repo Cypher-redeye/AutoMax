@@ -6,19 +6,24 @@ import dj_database_url
 # ===============================
 # 🌱 Environment Variables
 # ===============================
+BASE_DIR = Path(__file__).resolve().parent.parent
+
 env = environ.Env(
-    DJANGOAPPMODE=(str, "Debug"),
-    USEDEBUGDB=(bool, True),
+    DEBUG=(bool, False),
 )
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+# Load .env locally only
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 # ===============================
 # 🔐 Security
 # ===============================
-SECRET_KEY = env("SECRET_KEY", default="django-insecure-default-key")
-DEBUG = env("DJANGOAPPMODE") == "Debug"
+SECRET_KEY = env(
+    "SECRET_KEY",
+    default="django-insecure-change-this-in-production"
+)
+
+DEBUG = env.bool("DEBUG", default=False)
 
 ALLOWED_HOSTS = env.list(
     "ALLOWED_HOSTS",
@@ -80,23 +85,27 @@ TEMPLATES = [
 WSGI_APPLICATION = "automax.wsgi.application"
 
 # ===============================
-# 🗄️ Database
+# 🗄️ Database (IMPORTANT FIX)
 # ===============================
-USEDEBUGDB = env.bool("USEDEBUGDB", default=True)
 
-if USEDEBUGDB:
+DATABASE_URL = env("DATABASE_URL", default=None)
+
+if DATABASE_URL:
+    # ✅ Production (Render PostgreSQL)
+    DATABASES = {
+        "default": dj_database_url.config(
+            default=DATABASE_URL,
+            conn_max_age=600,
+            ssl_require=True,
+        )
+    }
+else:
+    # ✅ Local development (SQLite)
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
             "NAME": BASE_DIR / "db.sqlite3",
         }
-    }
-else:
-    DATABASE_URL = env("DATABASE_URL")
-    if not DATABASE_URL:
-        raise ValueError("DATABASE_URL must be set in production!")
-    DATABASES = {
-        "default": dj_database_url.parse(DATABASE_URL, conn_max_age=600)
     }
 
 # ===============================
@@ -121,10 +130,15 @@ USE_TZ = True
 # 🖼️ Static & Media
 # ===============================
 STATIC_URL = "/static/"
-STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
-if not DEBUG:
-    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+STATICFILES_DIRS = [BASE_DIR / "static"]
+
+STATICFILES_STORAGE = (
+    "whitenoise.storage.CompressedManifestStaticFilesStorage"
+    if not DEBUG
+    else "django.contrib.staticfiles.storage.StaticFilesStorage"
+)
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
@@ -142,13 +156,13 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = env("EMAIL_HOST", default="smtp.gmail.com")
 EMAIL_PORT = env.int("EMAIL_PORT", default=587)
 EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS", default=True)
-EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="dummy@example.com")
-EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="dummy")
+EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")
 
 # ===============================
 # ✅ Default Primary Key
 # ===============================
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_URL = "login"
+LOGIN_REDIRECT_URL = "home"
