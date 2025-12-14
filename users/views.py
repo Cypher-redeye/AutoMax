@@ -154,19 +154,3 @@ class ProfileView(View):
                 "user_liked_listings": user_liked_listings,
             },
         )
-
-
-# =====================================================
-# 🚨 TEMPORARY ADMIN CREATION (RENDER FREE TIER ONLY)
-# =====================================================
-# ⚠️ USE ONCE → THEN DELETE THIS FUNCTION & URL
-def create_admin_once(request):
-    if not User.objects.filter(username="admin").exists():
-        User.objects.create_superuser(
-            username="admin",
-            email="admin@example.com",
-            password="Admin@1234",
-        )
-        return HttpResponse("✅ Admin created successfully")
-
-    return HttpResponse("⚠️ Admin already exists")

@@ -1,5 +1,7 @@
 import uuid
 from django.db import models
+from cloudinary.models import CloudinaryField
+
 
 from .consts import CARS_BRANDS, TRANSMISSION_OPTIONS
 from users.models import Profile, Location
@@ -23,7 +25,8 @@ class Listing(models.Model):
         max_length=24, choices=TRANSMISSION_OPTIONS, default=None)
     location = models.OneToOneField(
         Location, on_delete=models.SET_NULL, null=True)
-    image = models.ImageField(upload_to=user_listing_path)
+    image = CloudinaryField('image', blank=True, null=True)
+
 
     def __str__(self):
         return f'{self.seller.user.username}\'s Listing - {self.model}'
