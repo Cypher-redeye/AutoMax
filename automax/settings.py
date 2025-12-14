@@ -144,13 +144,13 @@ STATICFILES_STORAGE = (
     else "django.contrib.staticfiles.storage.StaticFilesStorage"
 )
 
-# ===============================
-# ☁️ Media — Cloudinary (IMPORTANT)
+## ===============================
+# ☁️ Media — Cloudinary (CORRECT)
 # ===============================
 CLOUDINARY_STORAGE = {
-    "CLOUD_NAME": env("CLOUDINARY_CLOUD_NAME"),
-    "API_KEY": env("CLOUDINARY_API_KEY"),
-    "API_SECRET": env("CLOUDINARY_API_SECRET"),
+    "CLOUD_NAME": env("ddng8qahr"),
+    "API_KEY": env("636235763963398"),
+    "API_SECRET": env("aiZIb1Q2DPULJyBld90VMEZ7SK0"),
 }
 
 DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
