@@ -31,4 +31,4 @@ class LocationForm(forms.ModelForm):
 
     class Meta:
         model = Location
-        fields = {'address_1', 'address_2', 'city', 'state', 'zip_code'}
+        fields = ('address_1', 'address_2', 'city', 'state', 'zip_code')

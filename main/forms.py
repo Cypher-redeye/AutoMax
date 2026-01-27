@@ -9,5 +9,5 @@ class ListingForm(forms.ModelForm):
 
     class Meta:
         model = Listing
-        fields = {'brand', 'model', 'vin', 'mileage',
-                  'color', 'description', 'engine', 'transmission', 'image'}
+        fields = ('brand', 'model', 'vin', 'mileage',
+                  'color', 'description', 'engine', 'transmission', 'image')

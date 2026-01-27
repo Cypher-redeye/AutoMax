@@ -1,12 +1,18 @@
 {
-  "routes": [
-    {
-      "src": "/static/(.*)",
-      "dest": "/static/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "your_project_name/wsgi.py"
-    }
-  ]
+    "builds": [
+        {
+            "src": "automax/wsgi.py",
+            "use": "@vercel/python"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/static/(.*)",
+            "dest": "/static/$1"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "automax/wsgi.py"
+        }
+    ]
 }

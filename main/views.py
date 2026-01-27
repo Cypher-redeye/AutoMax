@@ -45,11 +45,11 @@ def list_view(request):
                     request, f'{listing.model} Listing Posted Successfully!')
                 return redirect('home')
             else:
-                raise Exception()
+                messages.error(request, 'Please correct the errors below.')
         except Exception as e:
             print(e)
             messages.error(
-                request, 'An error occured while posting the listing.')
+                request, f'An error occured while posting the listing: {e}')
     elif request.method == 'GET':
         listing_form = ListingForm()
         location_form = LocationForm()
@@ -79,7 +79,7 @@ def edit_view(request, id):
                 request.POST, request.FILES, instance=listing)
             location_form = LocationForm(
                 request.POST, instance=listing.location)
-            if listing_form.is_valid and location_form.is_valid:
+            if listing_form.is_valid() and location_form.is_valid():
                 listing_form.save()
                 location_form.save()
                 messages.info(request, f'Listing {id} updated successfully!')
@@ -87,7 +87,6 @@ def edit_view(request, id):
             else:
                 messages.error(
                     request, f'An error occured while trying to edit the listing.')
-                return reload()
         else:
             listing_form = ListingForm(instance=listing)
             location_form = LocationForm(instance=listing.location)
