@@ -19,4 +19,5 @@ CARS_BRANDS = (
 TRANSMISSION_OPTIONS = (
     ('automatic', 'Automatic'),
     ('manual', 'Manual'),
+    ('electric', 'Electric'),
 )

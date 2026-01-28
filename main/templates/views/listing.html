@@ -1,5 +1,6 @@
 {% extends 'base/base.html' %}
 {% load static %}
+{% load humanize %}
 {% block 'title' %}
 <title>AutoMax .
     {{ listing.model }} Listing
@@ -42,6 +43,10 @@
                                 <tr>
                                     <th scope="row" class="text-start">Mileage</th>
                                     <td> {{listing.mileage }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row" class="text-start">Price</th>
+                                    <td> ${{listing.price|intcomma}}</td>
                                 </tr>
                                 <tr>
                                     <th scope="row" class="text-start">Color</th>

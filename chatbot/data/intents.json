@@ -1,0 +1,307 @@
+{
+  "intents": [
+    {
+      "tag": "greet",
+      "patterns": [
+        "Hi",
+        "Hello",
+        "Hey",
+        "Good morning",
+        "Good evening",
+        "What's up?",
+        "Hey there",
+        "hi",
+        "how's everything?",
+        "hello there"
+      ],
+      "responses": [
+        "Hi, how can I assist you today?"
+      ]
+    },
+    {
+      "tag": "goodbye",
+      "patterns": [
+        "Bye",
+        "Thank you",
+        "See you later",
+        "Goodbye",
+        "Thanks",
+        "Catch you later",
+        "have a nice day",
+        "All good"
+      ],
+      "responses": [
+        "Have a nice day!",
+        "Goodbye",
+        "Goodbye! 👋 Come back to AutoHub.lk anytime for great deals."
+      ]
+    },
+    {
+      "tag": "ask_brand_model",
+      "patterns": [
+        "I’m looking for a BMW",
+        "Do you have Toyota cars?",
+        "Any Nissan Leaf?",
+        "Show me a Honda Fit",
+        "Tell me about Suzuki Wagon R",
+        "Looking for a Toyota Prius",
+        "Is BMW X5 available?",
+        "Have any Mitsubishi Montero?",
+        "What are the BMWs available",
+        "What Toyota vehicles available right now",
+        "Suggest me BYDs up for grab",
+        "Peugeot 406 is in sale?",
+        "Show me Honda cars",
+        "Can I get a Nissan Sunny?",
+        "What Suzuki cars available currently?",
+        "Do you have Toyota Vitz?",
+        "I’m looking for a BMW 520d",
+        "Show me a Nissan Sunny",
+        "Tell me about Mitsubishi Montero",
+        "Is Honda Fit available?",
+        "Can I get a Suzuki Wagon R?",
+        "Any listings for Toyota Prius?",
+        "Show me BMW X5s",
+        "Do you have Mazda Axela?",
+        "Looking for a Honda Civic",
+        "Is there any Toyota CHR?",
+        "I want a Nissan Leaf",
+        "Got any BMW 316i?",
+        "Do you have Proton Saga?",
+        "Looking for Honda Grace",
+        "Do you have BMW X5",
+        "Do you have toyota vitz",
+        "what are the available Honda Civic?",
+        "can you show me honda fit",
+        "looking for a used honda civic",
+        "What is the price of a Toyota Vitz?",
+        "What is the price of a Toyota AXIO?",
+        "What is the price of a BMW"
+      ],
+      "responses": [
+        "We have several {brand} {model} listings. Here's what I found:"
+      ]
+    },
+    {
+      "tag": "ask_cheapest",
+      "patterns": [
+        "what is the cheapest car",
+        "show me the cheapest vehicle",
+        "what is the cheapest Toyota car?",
+        "which is the lowest priced car?",
+        "any cheap SUV?",
+        "cheapest vehicle available?",
+        "show cheapest Nissan car",
+        "which brand has cheapest vehicles?"
+      ],
+      "responses": [
+        "Here is the lowest priced vehicle available:"
+      ]
+    },
+    {
+      "tag": "ask_price_range",
+      "patterns": [
+        "Show me cars under 5 million",
+        "Any vehicle under five million?",
+        "What do you have for 3M to 5M?",
+        "Vehicles between three million and five million",
+        "Cars under fifty lakhs",
+        "Show cars under 5000000",
+        "Show vehicles below 45 lakhs",
+        "What cars are in 2 million range?",
+        "Show me cars between 2.5 and 4.5 million",
+        "Suggest me a vehicle under 5000000",
+        "What are the SUVs under 1000000?",
+        "What are the BMWs under 50 million",
+        "any BMW under 4 million",
+        "show me Honda cars under 8 million",
+        "are there Toyota cars below 3 million",
+        "any Nissan vehicles under 5 million",
+        "what Suzuki cars between 2 and 5 million",
+        "do you have any BYD under 6 million",
+        "cars under 10 million from Toyota",
+        "any vehicle from BMW below 7 million",
+        "need Toyota cars below 5M",
+        "show me cars between 2 million and 4 million",
+        "suggest me vehicles from 3M to 6M",
+        "do you have Toyota cars between 4M and 7M?",
+        "show Honda cars from 5 million to 8 million",
+        "are there any BMWs between 3 million and 5 million?",
+        "I want to see cars priced from 6M to 10M",
+        "what Suzuki vehicles are there between 2.5 and 5.5 million",
+        "list me Nissan cars between 4000000 and 6000000",
+        "any BYD cars between 5 and 7 million?",
+        "need some Mitsubishi vehicles from 2 million to 3.5 million",
+        "show all Toyota models from 3M to 5M",
+        "what Peugeot cars are available between 4M and 6M?",
+        "can you list Honda cars in the 2 to 6 million range?",
+        "what are the vehicles between 3M to 7M?",
+        "which BMWs are available in 2 million to 5 million range?",
+        "list cars priced from 4,000,000 to 6,000,000",
+        "what vehicles fall within 3M - 6M price range?",
+        "get me Toyotas in the 2.5 to 4.5M range",
+        "do you have Nissan cars priced between 3M and 5M?",
+        "any available vehicles between 3M and 6M",
+        "I'm looking for an SUV under 10 million",
+        "Show me sedans below 5 million",
+        "Are there any hatchbacks between 2M and 4M?",
+        "List crossovers from 3M to 6M",
+        "Do you have any vans under 3 million?",
+        "Suggest me trucks below 7 million",
+        "What 4x4s are available under 6 million?",
+        "Can I see SUVs between 8M and 12M?",
+        "Show me available wagons under 5M",
+        "List me some hatchbacks priced from 2M to 4.5M",
+        "Need a sedan in the 3 to 6 million range",
+        "Can I get a crossover under 9 million?",
+        "Any trucks between 6 million and 10 million?",
+        "What are the cheapest SUVs under 8M?",
+        "I want an SUV from 4M to 9M",
+        "Suggest me a Toyota SUV under 10 million",
+        "Can I get a Honda crossover under 8 million",
+        "List Mitsubishi vans between 2 and 5 million",
+        "Show BMW sedans under 6 million",
+        "I want a Suzuki hatchback below 4 million",
+        "Any available 4x4s under 7M?",
+        "Do you have Nissan trucks between 3M to 6M?",
+        "Show electric cars under 5M",
+        "Looking for a petrol SUV under 9 million",
+        "could you suggest me some toyota cars under 5 million rupees"
+      ],
+      "responses": [
+        "Here are some vehicles within your budget:"
+      ]
+    },
+    {
+      "tag": "ask_by_fuel",
+      "patterns": [
+        "Do you have diesel cars?",
+        "Any petrol vehicles?",
+        "Show electric cars",
+        "What diesel variants are available?",
+        "Is there any hybrid model?",
+        "Can I see diesel engine cars?",
+        "I want a petrol car"
+      ],
+      "responses": [
+        "These are the vehicles with {fuel_type} engines:"
+      ]
+    },
+    {
+      "tag": "ask_by_vehicle_type",
+      "patterns": [
+        "Show me SUVs",
+        "I want a van",
+        "Do you have any hatchbacks?",
+        "Looking for a sedan",
+        "Any 4x4s available?",
+        "Do you have trucks?",
+        "Can I see crossover vehicles?"
+      ],
+      "responses": [
+        "Here are some {vehicle_type}s available:"
+      ]
+    },
+    {
+      "tag": "ask_leasing",
+      "patterns": [
+        "Can I lease a car?",
+        "Is leasing available?",
+        "What about financing options?",
+        "Can I buy this on loan?",
+        "Any installment plans?",
+        "Is a lease possible?",
+        "Can I get vehicle leasing?"
+      ],
+      "responses": [
+        "Please contact the vehicle owner directly for leasing details."
+      ]
+    },
+    {
+      "tag": "ask_by_location",
+      "patterns": [
+        "Show me cars in Galle",
+        "Find vehicles available in Colombo",
+        "Do you have any cars in Kandy?",
+        "List cars available in Negombo",
+        "Are there any cars for sale in Kurunegala?",
+        "Vehicles in Matara",
+        "Show cars near Galle",
+        "Find me cars in Anuradhapura"
+      ],
+      "responses": [
+        "Here are some vehicles available in {location}:"
+      ]
+    },
+    {
+      "tag": "messing_around",
+      "patterns": [
+        "sdasdhasdsadsadsadj",
+        "asdlkasndlas noidbnasoidbpib sad",
+        "whar hjasdahi sadn2wof n24isf",
+        "000000000000",
+        "1323242432634423421",
+        "12123242424",
+        "][]]asdkp`]]]",
+        "asdfasdfasdfasdf",
+        "lolololololol",
+        "alksdjalksdj",
+        "what even is this",
+        "idk just typing",
+        "hahahahajdjdj",
+        "\ud83e\udd14\ud83e\udd14\ud83e\udd14\ud83e\udd2f\ud83e\udd2f\ud83e\udd2f",
+        ".........",
+        "lalalalala",
+        "is this thing alive?",
+        "HELLOOOOOOOOO",
+        "heh heh heh heh",
+        "does this work",
+        "testing testing 123",
+        "blah blah blah",
+        "!!!???!!!",
+        "okokokokokokok",
+        "why are you like this",
+        "you good?",
+        "i am just playing around",
+        "\ud83d\ude02\ud83d\ude02\ud83d\ude02\ud83d\ude02\ud83d\ude02\ud83d\ude02\ud83d\ude02\ud83d\ude02",
+        "just being random",
+        "i pressed all the keys",
+        "bloop bloop beep",
+        "zzzzzzzzzzzzzz",
+        "are you broken?"
+      ],
+      "responses": [
+        "You're just messing around huh? \ud83d\ude09 Good luck!"
+      ]
+    },
+    {
+      "tag": "acknowledge_positive",
+      "patterns": [
+        "Great",
+        "Awesome",
+        "Alright",
+        "Nice",
+        "Perfect",
+        "Good",
+        "Cool",
+        "Excellent",
+        "Thanks a lot",
+        "That helped",
+        "Appreciate it"
+      ],
+      "responses": [
+        "Glad to hear that! \ud83d\ude0a Do you need help with anything else?",
+        "Awesome! Let me know if there's anything more I can do.",
+        "Great! Would you like to explore more vehicles or price ranges?",
+        "Cool \ud83d\ude0e I'm here if you need more assistance."
+      ]
+    },
+    {
+      "tag": "fallback",
+      "patterns": [],
+      "responses": [
+        "I'm not sure I understood that. Could you please rephrase?"
+      ]
+    }
+  ]
+}

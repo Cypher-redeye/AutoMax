@@ -18,6 +18,7 @@ class Listing(models.Model):
     model = models.CharField(max_length=64,)
     vin = models.CharField(max_length=17,)
     mileage = models.IntegerField(default=0)
+    price = models.IntegerField(default=0)
     color = models.CharField(max_length=24,)
     description = models.TextField()
     engine = models.CharField(max_length=24,)

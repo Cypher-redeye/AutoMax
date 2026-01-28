@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.humanize",
 
     # Third-party
     "cloudinary",
@@ -53,6 +54,7 @@ INSTALLED_APPS = [
     # Your apps
     "main",
     "users",
+    "chatbot",
 ]
 
 # ===============================

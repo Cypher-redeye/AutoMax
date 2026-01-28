@@ -1,4 +1,5 @@
 {% load static %}
+{% load humanize %}
 <div class="card shadow-sm">
     {% if listing.image %}
     <img class="bd-placeholder-img card-img-top" width="100%" src="{{listing.image.url}}" role="img"
@@ -22,6 +23,7 @@
         </div>
         <br>
         <p class="card-text">{{listing.description}}</p>
+        <p class="card-text text-success fw-bold">${{listing.price|intcomma}}</p>
         <div class="d-flex justify-content-between align-items-center">
             <div class="btn-group">
                 <a href="{% url 'listing' id=listing.id %}" type="button"
