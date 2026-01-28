@@ -34,14 +34,25 @@ class ChatbotConfig(AppConfig):
             nltk.download('omw-1.4')
 
         # 2. Load Model & Artifacts
-        if os.path.exists(model_path) and os.path.exists(le_path):
+        def load_model():
+            if os.path.exists(model_path) and os.path.exists(le_path):
+                try:
+                    with open(model_path, 'rb') as f:
+                        self.model = pickle.load(f)
+                    with open(le_path, 'rb') as f:
+                        self.le = pickle.load(f)
+                    print("✅ Chatbot Model Loaded!")
+                    return True
+                except Exception as e:
+                    print(f"❌ Error loading chatbot model: {e}")
+            return False
+
+        if not load_model():
+            print("⚠️ Model missing or incompatible. Retraining...")
             try:
-                with open(model_path, 'rb') as f:
-                    self.model = pickle.load(f)
-                with open(le_path, 'rb') as f:
-                    self.le = pickle.load(f)
-                print("✅ Chatbot Model Loaded!")
+                from chatbot.train import train_model
+                train_model()
+                print("✅ Retraining complete. Attempting to load...")
+                load_model()
             except Exception as e:
-                print(f"❌ Error loading chatbot model: {e}")
-        else:
-            print(f"⚠️ Chatbot model not found at {model_path}. Please run train.py.")
+                print(f"❌ Training failed: {e}")
