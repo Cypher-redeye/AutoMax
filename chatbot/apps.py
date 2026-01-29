@@ -41,10 +41,18 @@ class ChatbotConfig(AppConfig):
                         self.model = pickle.load(f)
                     with open(le_path, 'rb') as f:
                         self.le = pickle.load(f)
-                    print("✅ Chatbot Model Loaded!")
+                    
+                    # 3. Health Check: Dry run prediction
+                    # This catches sklearn version mismatches where load succeeds but predict fails
+                    self.model.predict_proba(["test"])
+                    
+                    print("✅ Chatbot Model Loaded & Verified!")
                     return True
                 except Exception as e:
-                    print(f"❌ Error loading chatbot model: {e}")
+                    print(f"❌ Error loading/verifying chatbot model: {e}")
+                    # Delete potentially corrupt files
+                    if os.path.exists(model_path): os.remove(model_path)
+                    if os.path.exists(le_path): os.remove(le_path)
             return False
 
         if not load_model():
