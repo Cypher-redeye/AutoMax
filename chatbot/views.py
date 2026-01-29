@@ -163,6 +163,83 @@ def predict_view(request):
                     else:
                         return JsonResponse({'answer': "I didn't catch the price limit. Try saying 'under 5000000'."})
 
+                # --- New Intents Logic ---
+                elif tag == 'ask_cheapest':
+                    listing = Listing.objects.filter(price__gt=0).order_by('price').first()
+                    if listing:
+                        response_text = f"Here is the lowest priced vehicle available:<br>🚗 <a href='/listing/{listing.id}' target='_blank' style='color: #007bff; text-decoration: none;'>{listing.brand.title()} {listing.model.title()}</a><br>💰 Rs. {listing.price:,}"
+                        return JsonResponse({'answer': response_text})
+                    else:
+                        return JsonResponse({'answer': "Sorry, I couldn't find any listings correctly priced right now."})
+
+                elif tag == 'ask_by_fuel':
+                    fuel_types = ['petrol', 'diesel', 'electric', 'hybrid']
+                    found_fuel = None
+                    for fuel in fuel_types:
+                        if fuel in message.lower():
+                            found_fuel = fuel
+                            break
+                    
+                    if found_fuel:
+                        if found_fuel == 'electric':
+                            # Check transmission for electric too
+                            listings = Listing.objects.filter(Q(engine__icontains='electric') | Q(transmission='electric')).order_by('-created_at')[:3]
+                        else:
+                            listings = Listing.objects.filter(engine__icontains=found_fuel).order_by('-created_at')[:3]
+
+                        if listings.exists():
+                            response_text = f"These are the vehicles with {found_fuel} engines:<br>"
+                            for listing in listings:
+                                response_text += f"- <a href='/listing/{listing.id}' target='_blank'>{listing.brand} {listing.model}</a>: Rs. {listing.price:,}<br>"
+                            return JsonResponse({'answer': response_text})
+                        else:
+                            return JsonResponse({'answer': f"Sorry, I don't see any {found_fuel} vehicles listing right now."})
+                    else:
+                        return JsonResponse({'answer': "Which fuel type are you looking for? (Petrol, Diesel, Electric, Hybrid)"})
+
+                elif tag == 'ask_by_vehicle_type':
+                    types = ['suv', 'van', 'hatchback', 'sedan', 'truck', 'crossover', 'wagon', '4x4', 'convertible']
+                    found_type = None
+                    for t in types:
+                        if t in message.lower():
+                            found_type = t
+                            break
+                    
+                    if found_type:
+                        listings = Listing.objects.filter(Q(model__icontains=found_type) | Q(description__icontains=found_type)).order_by('-created_at')[:3]
+                        if listings.exists():
+                            response_text = f"Here are some {found_type}s available:<br>"
+                            for listing in listings:
+                                response_text += f"- <a href='/listing/{listing.id}' target='_blank'>{listing.brand} {listing.model}</a>: Rs. {listing.price:,}<br>"
+                            return JsonResponse({'answer': response_text})
+                        else:
+                            return JsonResponse({'answer': f"Sorry, I don't see any {found_type}s listing right now."})
+                    else:
+                        return JsonResponse({'answer': "What type of vehicle are you looking for? (SUV, Sedan, Van, etc.)"})
+
+                elif tag == 'ask_by_location':
+                    from users.models import Location
+                    # Get all cities from DB to check against message
+                    cities = Location.objects.values_list('city', flat=True).distinct()
+                    found_city = None
+                    for city in cities:
+                        if city and city.lower() in message.lower():
+                            found_city = city
+                            break
+                    
+                    if found_city:
+                         listings = Listing.objects.filter(location__city__iexact=found_city).order_by('-created_at')[:3]
+                         if listings.exists():
+                            response_text = f"Here are some vehicles available in {found_city}:<br>"
+                            for listing in listings:
+                                response_text += f"- <a href='/listing/{listing.id}' target='_blank'>{listing.brand} {listing.model}</a>: Rs. {listing.price:,}<br>"
+                            return JsonResponse({'answer': response_text})
+                         else:
+                            return JsonResponse({'answer': f"Sorry, no listings found in {found_city} right now."})
+                    else:
+                        return JsonResponse({'answer': "Which city are you looking in? (e.g. Colombo, Kandy)"})
+
+
                 # --- End Database Integration ---
 
                 for intent in intents_json['intents']:
