@@ -12,6 +12,7 @@ except ImportError:
     from preprocessing import clean_up_sentence
 
 # ... (rest of imports)
+import os
 
 def train_model():
     # Load intents
